@@ -39,7 +39,6 @@ export default function Main() {
   const getPosition = () => {
     Geolocation.getCurrentPosition(
       pos => {
-        setError('');
         setPosition({
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
@@ -54,17 +53,30 @@ export default function Main() {
     );
   };
 
+  function handleUpdateUserLocation(pos) {
+    setPosition({
+      latitude: pos.coords.latitude,
+      longitude: pos.coords.longitude,
+    });
+  }
+
   function renderAnnotations() {
     return (
-      <MapboxGL.PointAnnotation
-        id="myGeoApp"
-        coordinate={[position.longitude, position.latitude]}
-      >
-        <View style={styles.annotationContainer}>
-          <View style={styles.annotationFill} />
-        </View>
-        <MapboxGL.Callout title="Localização do Canalha" />
-      </MapboxGL.PointAnnotation>
+      <>
+        <MapboxGL.UserLocation
+          visible={false}
+          onUpdate={e => handleUpdateUserLocation(e)}
+        />
+        <MapboxGL.PointAnnotation
+          id="myGeoApp"
+          coordinate={[position.longitude, position.latitude]}
+        >
+          <View style={styles.annotationContainer}>
+            <View style={styles.annotationFill} />
+          </View>
+          <MapboxGL.Callout title="Localização do Canalha" />
+        </MapboxGL.PointAnnotation>
+      </>
     );
   }
 
@@ -78,7 +90,7 @@ export default function Main() {
       style={styles.container}
     >
       <MapboxGL.Camera
-        zoomLevel={13}
+        zoomLevel={20}
         centerCoordinate={[position.longitude, position.latitude]}
       />
       {renderAnnotations()}
