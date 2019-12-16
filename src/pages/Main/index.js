@@ -54,6 +54,7 @@ export default function Main() {
   };
 
   function handleUpdateUserLocation(pos) {
+    console.log(pos);
     setPosition({
       latitude: pos.coords.latitude,
       longitude: pos.coords.longitude,
@@ -64,7 +65,8 @@ export default function Main() {
     return (
       <>
         <MapboxGL.UserLocation
-          visible={false}
+          visible
+          animated
           onUpdate={e => handleUpdateUserLocation(e)}
         />
         <MapboxGL.PointAnnotation
